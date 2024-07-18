@@ -3,23 +3,29 @@ import PropTypes from "prop-types";
 import { tv } from "tailwind-variants";
 
 const buttonVariants = tv({
-  base: "rounded-sm py-2 px-28.5 cursor-pointer",
+  base: "rounded-sm py-2 cursor-pointer text-custom-text-button-color",
   variants: {
-    variant: {
-      primary: "bg-custom-green text-custom-text-button-color hover:bg-green-600",
+    color: {
+      primary: "bg-custom-green hover:bg-green-600",
+      red: "bg-red-500 rounded-md hover:bg-red-600 max-sm:py-0",
+      blue: "bg-custom-blue rounded-md hover:bg-blue-600",
     },
     size: {
       default: "w-full",
     },
+    padding: {
+      default: "py-2",
+      sm: "px-2",
+    },
   },
   defaultVariants: {
-    variant: "primary",
+    color: "primary",
   },
 });
 
-export function Button({ children, variant, size, ...props }) {
+export function Button({ children, color, size, padding, ...props }) {
   return (
-    <button className={buttonVariants({ variant, size })} {...props}>
+    <button className={buttonVariants({ color, size, padding })} {...props}>
       {children}
     </button>
   );
@@ -27,6 +33,7 @@ export function Button({ children, variant, size, ...props }) {
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,
-  variant: PropTypes.oneOf(["primary"]),
+  color: PropTypes.oneOf(["primary","red","blue"]),
   size: PropTypes.oneOf(["default", "full"]),
+  padding: PropTypes.oneOf(["default", "sm"]),
 };
