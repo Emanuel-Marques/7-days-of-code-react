@@ -20,7 +20,7 @@ export function SignUp() {
     "border-custom-b-gray": !errors.email,
   });
 
-  const senhaClass = classNames({
+  const passwordClass = classNames({
     [defaultValue]: true,
     "border-rose-500": errors.password,
     "border-custom-b-gray": !errors.password,
@@ -31,7 +31,7 @@ export function SignUp() {
   };
 
   return (
-    <div className="flex items-center flex-col justify-center min-h-screen gap-4">
+    <div className="flex items-center flex-col justify-center min-h-screen gap-4 bg-slate-50">
       <h1 className="font-medium text-custom-blue text-3xl">Aluritter</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -47,20 +47,32 @@ export function SignUp() {
               pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
             })}
           />
-          {errors.email && (
-            <span className="text-rose-500 text-sm">Email inválido</span>
-          )}
+          {errors.email?.type === "required" ? (
+              <span className="text-xs text-red-500 pl-1">
+                Email é obrigatório
+              </span>
+            ) : null}
+            {errors.email?.type === "minLength" ? (
+              <span className="text-xs text-red-500 pl-1">
+                O email precisa ter pelo menos cinco caracteres
+              </span>
+            ) : null}
           <input
             type="password"
-            className={senhaClass}
+            className={passwordClass}
             placeholder="senha"
             {...register("password", { required: true, minLength: 6 })}
           />
-          {errors.senha && (
-            <span className="text-rose-500 text-sm">
-              Senha deve ter pelo menos 6 caracteres
-            </span>
-          )}
+          {errors.password?.type === "required" ? (
+              <span className="text-xs text-red-500 pl-1">
+                Senha é obrigatória
+              </span>
+            ) : null}
+            {errors.password?.type === "minLength" ? (
+              <span className="text-xs text-red-500 pl-1">
+                A senha precisa ter pelo menos oito caracteres
+              </span>
+            ) : null}
         </div>
         <div className="flex flex-col gap-2">
           <Button type="submit">Criar uma conta nova</Button>
@@ -68,7 +80,7 @@ export function SignUp() {
             Já possui uma conta ?{" "}
             <span
               onClick={() => navigate("/sign-in")}
-              className="text-custom-blue cursor-pointer"
+              className="text-custom-blue cursor-pointer hover:underline"
             >
               Acesse agora!
             </span>
