@@ -30,8 +30,8 @@ export const Home = () => {
           </Button>
         </div>
       </header>
-      <main className="mx-16 max-sm:mx-2 max-lg:mx-5 my-16">
-        <div className="flex flex-col gap-4">
+      <main className="mx-16 max-sm:mx-2 max-lg:mx-5">
+        <div className="flex flex-col gap-4 my-16 max-sm:my-5 max-lg:my-6">
           <form onSubmit={(event)=> handleFormSubmit(event)} className="flex flex-col gap-4">
             <label htmlFor="post" className="text-custom-gray">
               Alurite agora mesmo...
@@ -55,11 +55,9 @@ export const Home = () => {
                 </p>
               )}
               <Button
+                type="submit"
                 color={"blue"}
                 padding={"sm"}
-                onClick={() => {
-                  console.log("Publicando...");
-                }}
               >
                 Aluritar
               </Button>
