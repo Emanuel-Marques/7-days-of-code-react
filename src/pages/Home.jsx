@@ -1,13 +1,18 @@
+import { jwtDecode } from "jwt-decode";
 import { Button } from "../components/button";
 import { CardPost } from "../components/card-post";
 import { App } from "../layouts/App";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const user = jwtDecode(localStorage.getItem("access-token"));
 
   const handleLogout = () => {
-    console.log("SAINDO DA APLICACAO");
+    localStorage.removeItem("access-token");
+    navigate("/sign-in");
   };
 
   const handleFormSubmit = (event) => {
@@ -23,7 +28,7 @@ export const Home = () => {
         </div>
         <div className="flex items-center gap-3">
           <p className="font-normal text-custom-gray text-center">
-            johndoe@example.com
+            {user?.email}
           </p>
           <Button color={"red"} padding={"sm"} onClick={handleLogout}>
             Sair
