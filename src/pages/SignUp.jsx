@@ -2,8 +2,12 @@ import { useForm } from "react-hook-form";
 import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
+import { useState } from "react";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { Spinner } from "../components/spinner";
 
 export function SignUp() {
+  const [requesting, setRequesting] = useState(false);
   const {
     register,
     handleSubmit,
@@ -26,8 +30,16 @@ export function SignUp() {
     "border-custom-b-gray": !errors.password,
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = ({ email, password }) => {
+    setRequesting(true);
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((credential) => {
+        localStorage.setItem("access-token", credential.user.accessToken);
+        navigate("/");
+      })
+      .catch((error) => console.error(error.message))
+      .finally(() => setRequesting(false));
   };
 
   return (
@@ -75,7 +87,9 @@ export function SignUp() {
             ) : null}
         </div>
         <div className="flex flex-col gap-2">
-          <Button type="submit">Criar uma conta nova</Button>
+          <Button disabled={requesting} type="submit">
+            { requesting ? <Spinner /> : 'Criar uma conta nova'}
+          </Button>
           <p className="font-normal text-custom-gray text-center">
             Já possui uma conta ?{" "}
             <span
