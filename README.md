@@ -2,6 +2,7 @@
 
 Projeto #7DaysOfCode de #React para da Alura.
 Versão simplificada do Twitter (atualmente chamado de X) em React.
+Aplicação final: [Aluritte](https://days-days-of-code.firebaseapp.com/sign-in)
 
 ## Tecnologias:
 - **Vite**
