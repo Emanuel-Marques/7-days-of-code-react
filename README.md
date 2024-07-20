@@ -44,14 +44,16 @@ Versão simplificada do Twitter (atualmente chamado de X) em React.
     - Habilite o Hosting.
     - Obtenha o objeto de configuração do Firebase no Console do Firebase e adicione-o a um arquivo `firebase.config.json` na raiz do seu projeto:
         ```
-        "apiKey": "sua-api-key",
-        "authDomain": "seu-auth-domain",
-        "projectId": "seu-project-id",
-        "storageBucket":"seu-storage-bucket",
-        "messagingSenderId":"seu-messaging-sender-id"
-        "appId":"seu-app-id",
-        "databaseURL": "seu-database-url",
-        "measurementId": "seu-measurementId",
+        {
+          "apiKey": "sua-api-key",
+          "authDomain": "seu-auth-domain",
+          "projectId": "seu-project-id",
+          "storageBucket":"seu-storage-bucket",
+          "messagingSenderId":"seu-messaging-sender-id"
+          "appId":"seu-app-id",
+          "databaseURL": "seu-database-url",
+          "measurementId": "seu-measurementId",
+        }
         ```
 
 4. **Execute a Aplicação**:
