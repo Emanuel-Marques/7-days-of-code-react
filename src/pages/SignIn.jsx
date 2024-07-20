@@ -1,11 +1,16 @@
 import { useForm } from "react-hook-form";
 import classNames from "classnames";
-
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { App } from "../layouts/App";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
+import { useState } from "react";
+import { Spinner } from "../components/spinner";
 
 export function SignIn() {
+  const [authError, setAuthError] = useState(false);
+  const [authenticating, setAuthenticating] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -14,8 +19,21 @@ export function SignIn() {
 
   const navigate = useNavigate();
 
+  const auth = getAuth();
+
   const onSubmit = ({ email, password }) => {
-    console.log("Criando uma nova conta...", email, password);
+    setAuthenticating(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        localStorage.setItem("access-token", user.accessToken);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error.message);
+        setAuthError(true);
+      })
+      .finally(() => setAuthenticating(false));
   };
 
   const defaultValue =
@@ -79,8 +97,19 @@ export function SignIn() {
               </span>
             ) : null}
           </div>
+          {authError ? (
+            <p className="text-xs text-red-500 text-center mt-3">
+              Email ou senha inválidos
+            </p>
+          ) : null}
           <div className="flex flex-col gap-2">
-            <Button type="submit">Acessar plataforma</Button>
+            <Button type="submit" disabled={authenticating}>
+              {authenticating ? (
+                <div className="flex items-center justify-center gap-2">
+                  <Spinner /> Acessando plataforma
+                </div>
+              ) : "Acessar plataforma"}
+            </Button>
             <p className="font-normal text-custom-gray text-center">
               Não possui uma conta ?{" "}
               <span
