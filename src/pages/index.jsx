@@ -28,14 +28,14 @@ PublicRoute.propTypes = {
   children: PropTypes.node,
 };
 
-export const Pages = () => (
+export const Pages = ({ app }) => (
   <Router>
     <Routes>
       <Route
         path="/"
         element={
           <PrivateRoute>
-            <Home />
+            <Home app={ app } />
           </PrivateRoute>
         } 
       />
@@ -44,7 +44,7 @@ export const Pages = () => (
         path='/sign-up'
         element={
           <PublicRoute>
-            <SignIn />
+            <SignUp />
           </PublicRoute>
         } 
       />
@@ -52,7 +52,7 @@ export const Pages = () => (
         path='/sign-in'
         element={
           <PublicRoute>
-            <SignUp />
+            <SignIn />
           </PublicRoute>
         }
       />
@@ -60,3 +60,7 @@ export const Pages = () => (
     </Routes>
   </Router>
 );
+
+Pages.propTypes = {
+  app: PropTypes.any.isRequired,
+};

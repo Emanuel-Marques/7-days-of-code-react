@@ -1,14 +1,31 @@
+import PropTypes from "prop-types";
+import { getDatabase, ref, set, onValue } from "firebase/database";
 import { jwtDecode } from "jwt-decode";
 import { Button } from "../components/button";
 import { CardPost } from "../components/card-post";
 import { App } from "../layouts/App";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as uuid from "uuid";
 
-export const Home = () => {
+export const Home = ({ app }) => {
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
   const user = jwtDecode(localStorage.getItem("access-token"));
+
+  useEffect(() => {
+    onValue(ref(getDatabase(app), "alurites"), (snapshot) => {
+      const data = [];
+      snapshot.forEach((registry) => {
+        data.push({
+          ...registry.val(),
+          id: registry.key,
+        });
+      });
+      setMessages(data);
+    });
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("access-token");
@@ -17,7 +34,12 @@ export const Home = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    console.log("PUBLICANDO UM NOVO TWEET");
+    const db = getDatabase(app);
+    set(ref(db, `alurites/${uuid.v4()}`), {
+      message,
+      by: user.email,
+      when: new Date().getTime(),
+    }).then(() => setMessage(""));
   };
 
   return (
@@ -68,9 +90,24 @@ export const Home = () => {
               </Button>
             </div>
           </form>
-          <CardPost />
+          {
+          messages.length === 0 ? <p className="text-center text-custom-gray ">Sem tweets recentes</p> : messages
+              .sort((m1, m2) => m2.when - m1.when)
+              .map((m) => (
+                <CardPost 
+                  key={m.id}
+                  message={m.message}
+                  by={m.by}
+                  when={m.when}
+                />
+              ))
+          }
         </div>
       </main>
     </App>
   );
+};
+
+Home.propTypes = {
+  app: PropTypes.any.isRequired,
 };
